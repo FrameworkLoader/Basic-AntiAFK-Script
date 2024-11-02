@@ -1,0 +1,56 @@
+--[[ 
+    ────────────────────────────────────────────────────────────
+                        AntiAFK.lua
+    ────────────────────────────────────────────────────────────
+    🔹  Description: Automatically reconnects the player before they get kicked for inactivity.
+    🔹  Creation Date: 26/09/2019 | 2:29 AM
+    🔹  Author: FrameworkLoader
+    🔹  Version: v//1.0.0
+    ────────────────────────────────────────────────────────────
+ ]]
+
+-- # Define The Timer, and the maximum time.
+local Timer = 0
+local MaxTime = 19 * 60 -- ! 19 Minutes
+
+-- # ** Service Initialization
+local UserInputService = game:GetService("UserInputService")
+local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+
+local Player = Players.LocalPlayer
+
+-- 🔹 Store the current Place Instance ID and ServerID
+local PlaceID = game.PlaceId
+local ServerID = game.JobId
+
+-- 🔹 Fetch the Player's mouse
+local Mouse = Player:GetMouse()
+
+
+
+-- 🔹 Reset the timer whenever the player moves their mouse.
+Mouse.Move:Connect(function()
+    Timer = 0
+end)
+
+-- 🔹 Reset the timer if the player makes any sort of input.
+UserInputService.InputEnded:Connect(function()
+    Timer = 0
+end)
+
+-- 🔹 You can feel free to add more detections for other devices like mobile or console,
+-- 🔹 Its very easy to do.
+
+
+-- 🔹 Main loop to add time, and assure that
+-- 🔹 When the Max time is reached, the player is reconnected.
+-- 🔹 This is done to assure the player doesn't get kicked for being AFK.
+while true do
+    wait(1)
+    Timer = Timer + 1
+    if Timer >= MaxTime then
+        TeleportService:TeleportToPlaceInstance(PlaceID, ServerID)
+        break
+    end
+end
